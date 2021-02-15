@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+#define int long long
+#define MOD 1000000007
+#define sort(a) sort(a.begin(),a.end())
+#define endl '\n'
+#define FOR(a, c) for (int(a) = 0; (a) < (c); (a)++)
+using namespace std;
+
+int merge(int arr[], int temp[], int l, int mid, int r) {
+	int i = l, k = l, j = mid, count = 0;
+	while ((i <= mid - 1) && (j <= r)) {
+		if (arr[i] <= arr[j]) {
+			temp[k] = arr[i];
+			i++;
+			k++;
+		}
+		else {
+			temp[k] = arr[j];
+			j++;
+			k++;
+			count += mid - i;
+		}
+	}
+	while (i <= mid - 1) {
+		temp[k] = arr[i];
+		i++;
+		k++;
+	}
+	while (j <= r) {
+		temp[k] = arr[j];
+		j++;
+		k++;
+	}
+	for (int i = l; i <= r; i++) {
+		arr[i] = temp[i];
+	}
+	return count;
+}
+
+int merge_sort(int arr[], int temp[], int l, int r) {
+	int mid, count = 0;
+	if (l < r) {
+		int mid = (l + r) / 2;
+		count += merge_sort(arr, temp, l, mid);
+		count += merge_sort(arr, temp, mid + 1, r);
+		count += merge(arr, temp, l, mid + 1, r);
+
+	}
+	return count;
+}
+
+int32_t main() {
+#ifndef ONLINE_JUDGE
+	/* code */
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
+#endif
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int arr[] = {3, 1, 2};
+	int n = sizeof(arr) / sizeof(arr[0]);
+	int temp[n];
+	int ans = merge_sort(arr, temp, 0, n - 1);
+	cout << ans;
+	return 0;
+
+
+}
